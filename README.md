@@ -38,8 +38,8 @@ var CERT_HOSTNAME = "email.alexdoe.com";
 ```
 
 You can configure the cert to be issued for trusted IPs instead of
-hostnames; to do this comment line 60, uncomment line 59, and
-configure a list of trusted IPs like so:
+hostnames; to do this comment line 60, uncomment lines 29 and 59, and
+configure the list of IPs on line 59 like so:
 
 ```go
 	IPAddresses:           []net.IP{net.ParseIP("127.0.0.1")},

@@ -26,7 +26,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"math/big"
-	"net"
+//	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -47,7 +47,7 @@ var CERT_HOSTNAME = "";
 var tlsTemplate = x509.Certificate{ //nolint[gochecknoglobals]
 	SerialNumber: big.NewInt(-1),
 	Subject: pkix.Name{
-		Country:            []{CERT_COUNTRY},
+		Country:            []string{CERT_COUNTRY},
 		Organization:       []string{CERT_ORGANIZATION},
 		OrganizationalUnit: []string{CERT_ORGANIZATIONAL_UNIT},
 		CommonName:         CERT_HOSTNAME,
@@ -57,7 +57,7 @@ var tlsTemplate = x509.Certificate{ //nolint[gochecknoglobals]
 	BasicConstraintsValid: true,
 	IsCA:                  true,
 //	IPAddresses:           [],
-        DNSNames:              []{CERT_HOSTNAME},
+        DNSNames:              []string{CERT_HOSTNAME},
 	NotBefore:             time.Now(),
 	NotAfter:              time.Now().Add(365 * 24 * time.Hour),
 }
