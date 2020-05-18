@@ -39,21 +39,27 @@ type tlsConfiger interface {
 	GetTLSKeyPath() string
 }
 
+var CERT_COUNTRY = "";
+var CERT_ORGANIZATION = "";
+var CERT_ORGANIZATIONAL_UNIT = "";
+var CERT_HOSTNAME = "";
+
 var tlsTemplate = x509.Certificate{ //nolint[gochecknoglobals]
 	SerialNumber: big.NewInt(-1),
 	Subject: pkix.Name{
-		Country:            []string{"CH"},
-		Organization:       []string{"Proton Technologies AG"},
-		OrganizationalUnit: []string{"ProtonMail"},
-		CommonName:         "127.0.0.1",
+		Country:            []{CERT_COUNTRY},
+		Organization:       []string{CERT_ORGANIZATION},
+		OrganizationalUnit: []string{CERT_ORGANIZATIONAL_UNIT},
+		CommonName:         CERT_HOSTNAME,
 	},
 	KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 	ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth, x509.ExtKeyUsageClientAuth},
 	BasicConstraintsValid: true,
 	IsCA:                  true,
-	IPAddresses:           []net.IP{net.ParseIP("127.0.0.1")},
+//	IPAddresses:           [],
+        DNSNames:              []{CERT_HOSTNAME},
 	NotBefore:             time.Now(),
-	NotAfter:              time.Now().Add(20 * 365 * 24 * time.Hour),
+	NotAfter:              time.Now().Add(365 * 24 * time.Hour),
 }
 
 var ErrTLSCertExpireSoon = fmt.Errorf("TLS certificate will expire soon")
@@ -83,7 +89,7 @@ func GetTLSConfig(cfg tlsConfiger) (tlsConfig *tls.Config, err error) {
 		}
 	}
 
-	tlsConfig.ServerName = "127.0.0.1"
+	tlsConfig.ServerName = CERT_HOSTNAME
 	tlsConfig.ClientAuth = tls.VerifyClientCertIfGiven
 
 	caCertPool := x509.NewCertPool()

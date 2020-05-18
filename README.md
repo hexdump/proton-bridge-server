@@ -6,6 +6,68 @@ For a detailed build information see [BUILDS](./BUILDS.md).
 For licensing information see [COPYING](./COPYING.md).
 For contribution policy see [CONTRIBUTING](./CONTRIBUTING.md).
 
+## Patch Notes
+
+**Note: I know nothing about security and I don't know if this is a security nightmare. Use this at your own risk.**
+
+This fork of ProtonMail bridge allows you to run the Bridge as a
+IMAP/SMTP server which can then be served to clients on multiple
+devices.
+
+### Configuring Certificate
+
+Currently, on-the-fly hostname configuration is not enabled; you'll
+have to build the hostname into the application. Hostname
+configuration is stored in `pkg/config/tls.go`. All you need to
+configure is these four lines:
+
+```go
+var CERT_COUNTRY = "";
+var CERT_ORGANIZATION = "";
+var CERT_ORGANIZATIONAL_UNIT = "";
+var CERT_HOSTNAME = "";
+```
+
+You can configure the cert to be issued for trusted IPs instead of
+hostnames; to do this comment line 60, uncomment line 59, and
+configure a list of trusted IPs like so:
+
+```go
+	IPAddresses:           []net.IP{net.ParseIP("127.0.0.1")},
+```
+
+### Building (for Linux)
+
+After you've configured your hostname/IP for the certificate, run
+`make build` in order to create the `proton-bridge` binary,
+which will end up in `cmd/Desktop-Bridge/deploy/linux/`.
+
+### Configuring (for Linux/Systemd/tmux)
+
+In order to make the bridge run in the background, I created a
+Systemd service to launch the Bridge:
+
+```
+[Unit]
+Description=IMAP/SMTP interface to ProtonMail
+After=network.target
+
+[Service]
+Type=simple
+User=
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/tmux new-session -d -s protonmail-bridge /proton-bridge/cmd/Desktop-Bridge/deploy/linux/proton-bridge --cli
+
+[Install]
+WantedBy=multi-user.target
+```
+
+In order to use this Systemd service, fill in a user in the `User=`
+field and make sure they have access to a supported password manager.
+If one is not detected, I recommend installing and initializing
+`pass`.
+
 ## Description
 ProtonMail Bridge for e-mail clients.
 
