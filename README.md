@@ -28,6 +28,15 @@ var CERT_ORGANIZATIONAL_UNIT = "";
 var CERT_HOSTNAME = "";
 ```
 
+An example configuration is:
+
+```go
+var CERT_COUNTRY = "CA";
+var CERT_ORGANIZATION = "Alex Doe";
+var CERT_ORGANIZATIONAL_UNIT = "ProtonMail Bridge";
+var CERT_HOSTNAME = "email.alexdoe.com";
+```
+
 You can configure the cert to be issued for trusted IPs instead of
 hostnames; to do this comment line 60, uncomment line 59, and
 configure a list of trusted IPs like so:
