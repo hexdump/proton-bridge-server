@@ -77,6 +77,16 @@ field and make sure they have access to a supported password manager.
 If one is not detected, I recommend installing and initializing
 `pass`.
 
+### Certificate Trust
+
+Since we're self-signing a certificate, you need to install the
+self-signed certificate on all clients. Once you've opened and
+initialized the Bridge, a file named `cert.pem` will be located
+in `~/.config/protonmail/bridge`. Copy this file to all clients
+and add it as a trusted certificate in order to get them to trust
+your server. Disabling encryption on the clients *will not* work with
+the Bridge.
+
 ## Description
 ProtonMail Bridge for e-mail clients.
 
